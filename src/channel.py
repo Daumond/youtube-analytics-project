@@ -17,10 +17,37 @@ class Channel:
         self.channel = Channel.get_service().channels().list(id=self.__channel_id, part='snippet,statistics').execute()
         self.title = self.channel['items'][0]['snippet']['title']
         self.description = self.channel['items'][0]['snippet']['description']
-        self.subscriber_count = self.channel['items'][0]['statistics']['subscriberCount']
+        self.subscriber_count = int(self.channel['items'][0]['statistics']['subscriberCount'])
         self.view_count = self.channel['items'][0]['statistics']['viewCount']
         self.video_count = self.channel['items'][0]['statistics']['videoCount']
         self.url = f"https://www.youtube.com/channel/{self.channel['items'][0]['id']}"
+
+    def __str__(self):
+        return f"{self.title} ({self.url})"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__} ({self.__channel_id})"
+
+    def __add__(self, other):
+        return self.subscriber_count + other.subscriber_count
+
+    def __sub__(self, other):
+        return self.subscriber_count - other.subscriber_count
+
+    def __gt__(self, other):
+        return self.subscriber_count > other.subscriber_count
+
+    def __ge__(self, other):
+        return self.subscriber_count >= other.subscriber_count
+
+    def __lt__(self, other):
+        return self.subscriber_count < other.subscriber_count
+
+    def __le__(self, other):
+        return self.subscriber_count <= other.subscriber_count
+
+    def __eq__(self, other):
+        return self.subscriber_count == other.subscriber_count
 
     @property
     def channel_id(self):
